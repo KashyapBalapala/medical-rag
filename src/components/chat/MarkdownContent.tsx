@@ -8,9 +8,10 @@ import { cn } from "@/lib/design-system";
 type MarkdownContentProps = {
   content: string;
   className?: string;
+  components?: Components;
 };
 
-const markdownComponents: Components = {
+const defaultMarkdownComponents: Components = {
   a: ({ href, children, ...props }) => (
     <a
       href={href}
@@ -27,6 +28,7 @@ const markdownComponents: Components = {
 export default function MarkdownContent({
   content,
   className,
+  components,
 }: MarkdownContentProps) {
   return (
     <div
@@ -42,7 +44,10 @@ export default function MarkdownContent({
         className,
       )}
     >
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{ ...defaultMarkdownComponents, ...components }}
+      >
         {content}
       </ReactMarkdown>
     </div>

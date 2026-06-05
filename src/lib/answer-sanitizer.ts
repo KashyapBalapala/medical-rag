@@ -94,7 +94,7 @@ export function stripDanglingTableReferences(
         "",
       )
       .replace(new RegExp(`\\bTable\\s+${tableNum}\\b`, "gi"), "")
-      .replace(/\s{2,}/g, " ")
+      .replace(/[ \t]{2,}/g, " ")
       .replace(/\s+([,.])/g, "$1")
       .trim();
   }
@@ -115,7 +115,7 @@ export function stripDanglingTableReferences(
         "",
       )
       .replace(new RegExp(`\\bFigure\\s+${figureNum}\\b`, "gi"), "")
-      .replace(/\s{2,}/g, " ")
+      .replace(/[ \t]{2,}/g, " ")
       .replace(/\s+([,.])/g, "$1")
       .trim();
   }
@@ -149,7 +149,7 @@ export function sanitizePublicAnswer(text: string, context?: string): string {
   answer = answer
     .replace(/\bContext \d+(?:\s+and\s+Context \d+)*/gi, "the documents")
     .replace(META_INLINE_RE, "")
-    .replace(/\s{2,}/g, " ")
+    .replace(/[ \t]{2,}/g, " ")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 

@@ -1,4 +1,5 @@
 import { sanitizePublicAnswer } from "./answer-sanitizer";
+import { normalizeResearchAnswerMarkdown } from "./research-answer-formatter";
 import { searchDocuments, type SearchResult } from "./retrieve";
 import { getRagModelInfo, type RagModelInfo } from "./rag-config";
 import { generateRetrievalPlan } from "./research/planner";
@@ -518,12 +519,23 @@ Answer:`;
 
 Answer the Current Question about ${capitalizeTopic(topic)} only.
 
-Use this markdown structure (keep bullets concise):
+Use this markdown hierarchy (# = title, ## = section, ### = subsection):
 
-## ${capitalizeTopic(topic)}
+# ${capitalizeTopic(topic)}
 
-### ${sectionHeading}
+## ${sectionHeading}
 - ...
+
+### Treatment
+- ...
+
+IMPORTANT:
+- Use exactly ONE # heading for the topic title.
+- Use ## for major sections (e.g. ${sectionHeading}).
+- Use ### for subsections (e.g. Treatment, Diagnosis) under the topic.
+- Put each heading on its own line. Use "-" bullets for list items.
+- Do NOT output plain-text headings without # markers.
+- Do NOT repeat the same content in plain text and markdown.
 
 Rules:
 - Focus ONLY on ${capitalizeTopic(topic)}. Do NOT discuss other conditions.
@@ -1133,6 +1145,9 @@ export async function askQuestion(
       }),
     });
     answer = ollamaResult.answer;
+    if (researchMode && !comparisonMode) {
+      answer = normalizeResearchAnswerMarkdown(answer);
+    }
     thinking = ollamaResult.thinking;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

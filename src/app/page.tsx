@@ -63,21 +63,28 @@ export default function Home() {
   const [statsLoading, setStatsLoading] = useState(true);
   const [statsError, setStatsError] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [debugMode, setDebugMode] = useState(() => loadDebugMode());
-  const [researchMode, setResearchMode] = useState(() => loadResearchMode());
+  const [debugMode, setDebugMode] = useState(false);
+  const [researchMode, setResearchMode] = useState(false);
+  const [prefsHydrated, setPrefsHydrated] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const evidence = useSourceCollection();
   const pdfViewer = useSourceCollection();
 
   useEffect(() => {
-    if (!hydrated) return;
-    localStorage.setItem(DEBUG_KEY, String(debugMode));
-  }, [debugMode, hydrated]);
+    setDebugMode(loadDebugMode());
+    setResearchMode(loadResearchMode());
+    setPrefsHydrated(true);
+  }, []);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!prefsHydrated) return;
+    localStorage.setItem(DEBUG_KEY, String(debugMode));
+  }, [debugMode, prefsHydrated]);
+
+  useEffect(() => {
+    if (!prefsHydrated) return;
     localStorage.setItem(RESEARCH_KEY, String(researchMode));
-  }, [researchMode, hydrated]);
+  }, [researchMode, prefsHydrated]);
 
   const fetchStats = useCallback(async () => {
     setStatsLoading(true);
