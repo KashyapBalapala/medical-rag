@@ -77,12 +77,12 @@ flowchart TB
     end
 
     subgraph api [API Routes]
-        CHAT[/api/chat]
-        UP[/api/upload]
-        DOC[/api/documents]
-        ST[/api/stats]
-        PDFAPI[/api/pdf]
-        CHUNK[/api/sources/chunk]
+        CHAT["/api/chat"]
+        UP["/api/upload"]
+        DOC["/api/documents"]
+        ST["/api/stats"]
+        PDFAPI["/api/pdf"]
+        CHUNK["/api/sources/chunk"]
     end
 
     subgraph core [Core Libraries]
